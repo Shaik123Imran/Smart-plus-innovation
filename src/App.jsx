@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { DataProvider } from './context/DataContext'
+import ScrollToTop from './components/layout/ScrollToTop'
 
 // Pages
 import Home from './pages/Home'
@@ -21,6 +22,7 @@ import NotFound from './pages/NotFound'
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <DataProvider>
           <div className="min-h-screen bg-background">

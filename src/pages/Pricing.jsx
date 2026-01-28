@@ -33,18 +33,22 @@ function Pricing() {
             </p>
 
             {/* Billing Toggle */}
-            <div className="flex items-center justify-center gap-4 mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
               <span className={`font-medium ${!isAnnual ? 'text-text' : 'text-text/50'}`}>Monthly</span>
               <button
                 onClick={() => setIsAnnual(!isAnnual)}
-                className={`relative w-14 h-7 rounded-full transition-colors ${isAnnual ? 'bg-primary' : 'bg-gray-300'}`}
+                className={`relative w-14 h-8 rounded-full transition-colors ${isAnnual ? 'bg-primary' : 'bg-gray-300'} focus:outline-none focus:ring-4 focus:ring-primary/20`}
+                aria-label="Toggle billing period"
+                type="button"
               >
-                <span className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${isAnnual ? 'translate-x-7' : 'translate-x-0.5'}`}></span>
+                <span
+                  className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow transition-transform ${isAnnual ? 'translate-x-6' : 'translate-x-0'}`}
+                />
               </button>
-              <span className={`font-medium ${isAnnual ? 'text-text' : 'text-text/50'}`}>
-                Annually 
-                <Badge variant="success" className="ml-2">Save {annualDiscount}%</Badge>
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`font-medium ${isAnnual ? 'text-text' : 'text-text/50'}`}>Annually</span>
+                <Badge variant="success">Save {annualDiscount}%</Badge>
+              </div>
             </div>
           </div>
 
@@ -52,15 +56,17 @@ function Pricing() {
             {pricingPlans.map((plan) => (
               <div
                 key={plan.id}
-                className={`relative bg-white rounded-2xl p-8 ${
+                className={`group relative bg-white rounded-2xl p-8 transform-gpu transition-all duration-300 ${
                   plan.popular 
-                    ? 'ring-2 ring-primary shadow-2xl scale-105' 
-                    : 'shadow-lg'
-                }`}
+                    ? 'ring-2 ring-primary shadow-2xl scale-[1.03] hover:scale-[1.06]' 
+                    : 'shadow-lg hover:shadow-2xl hover:shadow-primary/10 hover:scale-[1.04]'
+                } hover:-translate-y-1 hover:ring-2 hover:ring-primary/40`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <Badge variant="primary">Most Popular</Badge>
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2">
+                    <div className="bg-white rounded-full px-2 py-1 shadow-sm ring-1 ring-gray-100">
+                      <Badge variant="primary">Most Popular</Badge>
+                    </div>
                   </div>
                 )}
 
