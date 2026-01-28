@@ -46,7 +46,7 @@ function Navbar() {
               <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
                 <span className="text-white font-bold text-xl">S+</span>
               </div>
-              <span className="text-xl font-bold text-text">Smart<span className="text-primary">Plus</span></span>
+              <span className="text-xl font-bold text-text">Smart <span className="text-primary">Plus Innovation</span></span>
             </Link>
           </div>
 

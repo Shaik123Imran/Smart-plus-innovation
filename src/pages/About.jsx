@@ -1,9 +1,38 @@
+import { useState, useEffect } from 'react'
 import Layout from '../components/layout/Layout'
 import { useData } from '../context/DataContext'
+import { calculateDynamicStats, formatStats } from '../services/stats'
 import Button from '../components/common/Button'
 
 function About() {
-  const { team, stats, values } = useData()
+  const { team, values } = useData()
+  const [stats, setStats] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const dynamicStats = await calculateDynamicStats()
+        const formattedStats = formatStats(dynamicStats)
+        setStats(formattedStats)
+      } catch (error) {
+        console.error('Error loading stats:', error)
+        // Fallback to default
+        const defaultStats = formatStats({
+          activeStudents: 10000,
+          partnerCompanies: 200,
+          placementRate: 95,
+          expertMentors: 50,
+          countries: 30,
+          studentRating: 4.9
+        })
+        setStats(defaultStats)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadStats()
+  }, [])
 
   const iconMap = {
     star: (
@@ -54,14 +83,25 @@ function About() {
       {/* Stats Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-6 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl lg:text-4xl font-extrabold text-primary mb-2">{stat.number}</div>
-                <div className="text-text/60">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="grid grid-cols-2 lg:grid-cols-6 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="text-center animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-6 gap-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl lg:text-4xl font-extrabold text-primary mb-2">{stat.number}</div>
+                  <div className="text-text/60">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

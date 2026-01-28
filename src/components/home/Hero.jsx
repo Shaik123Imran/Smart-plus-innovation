@@ -23,7 +23,7 @@ function Hero() {
               <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                 Full Potential
               </span>
-              With Smart Learning
+              With Smart Plus Innovation
             </h1>
 
             <p className="text-lg text-text/60 max-w-xl leading-relaxed">

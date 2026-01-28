@@ -93,7 +93,7 @@ function Footer() {
               <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
                 <span className="text-white font-bold text-xl">S+</span>
               </div>
-              <span className="text-xl font-bold">Smart<span className="text-primary">Plus</span></span>
+              <span className="text-xl font-bold">Smart <span className="text-primary">Plus Innovation</span></span>
             </Link>
             <p className="text-white/60 mb-6 max-w-sm leading-relaxed">
               Empowering the next generation of tech professionals with industry-leading education and career support.

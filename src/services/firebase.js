@@ -98,6 +98,14 @@ export const registerUser = async (email, password, displayName) => {
       createdAt: serverTimestamp()
     })
     
+    // Increment active students stat
+    try {
+      const { incrementStat } = await import('./stats')
+      await incrementStat('activeStudents')
+    } catch (error) {
+      console.log('Could not increment stats:', error)
+    }
+    
     return userCredential.user
   } else {
     // Demo mode
@@ -118,6 +126,14 @@ export const registerUser = async (email, password, displayName) => {
     users[email] = { ...user, password }
     saveDemoUsers(users)
     saveDemoCurrentUser(user)
+    
+    // Increment active students stat in demo mode
+    try {
+      const { incrementStat } = await import('./stats')
+      await incrementStat('activeStudents')
+    } catch (error) {
+      console.log('Could not increment stats:', error)
+    }
     
     return user
   }
@@ -178,18 +194,28 @@ export const logoutUser = async () => {
 
 export const resetPassword = async (email) => {
   if (isFirebaseConfigured && auth) {
-    await sendPasswordResetEmail(auth, email)
-    return { success: true, message: 'Password reset email sent! Check your inbox.' }
+    try {
+      await sendPasswordResetEmail(auth, email)
+      return { success: true, message: 'Password reset email sent! Please check your inbox and follow the instructions to reset your password.' }
+    } catch (error) {
+      if (error.code === 'auth/user-not-found') {
+        return { success: false, error: 'No account found with this email address.' }
+      }
+      return { success: false, error: error.message }
+    }
   } else {
     // Demo mode
     const users = getDemoUsers()
     if (!users[email]) {
-      throw new Error('No account found with this email address.')
+      return { 
+        success: false, 
+        error: 'No account found with this email address. Please check your email or register a new account.' 
+      }
     }
-    // In demo mode, we'll just show a message
+    // In demo mode, show helpful message
     return { 
       success: true, 
-      message: 'Demo Mode: Password reset would be sent to ' + email + '. For demo, use your existing password or register a new account.',
+      message: `Demo Mode: Password reset email would be sent to ${email}. Since Firebase is not configured, please remember your password or register a new account. Once Firebase is configured, password reset emails will be sent automatically.`,
       demo: true
     }
   }
